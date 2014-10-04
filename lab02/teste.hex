@@ -1,0 +1,25 @@
+3FF 000000000A #carrega o valor de x
+3FE 000000000A #carrega o valor de g=10 na memoria
+
+0AA 0000000000 #guarda o valor de y
+0AB 0000000000 #vai guardar o valor de k na iteracao
+
+0AC 000000000A #vai guardar o contador
+0AD 0000000001 #vai guardar o numero 1 para incrementar
+0AE 000000000A #valor maximo de interacoes
+
+
+000 09 3FE 0B 3FF #carregamos g no MQ e multiplicamos por X 
+001 0A 000 0A 000
+#agora AC = gx
+002 21 0AA 15 000 #guarda y na memoria e divide y por dois
+#agora AC = Y/2 = K
+003 21 0AB 01 0AA #guarda k na memoria (esquerda) e le y pro AC (direita)- JUMP HERE!
+004 0C 0AB 05 0AB #divide por k e adiciona k no AC
+005 15 000 21 0AB #divide por dois e guarda o valor de k em 0AB
+#agora copia o contador para ac e subtrai
+006 01 0AC 06 0AD 
+007 21 0AC 10 003 #agora salva o contador e salta
+
+#pegamos o valor de AC da memoria e encerramos o programa
+008 01 0AB 0D 400

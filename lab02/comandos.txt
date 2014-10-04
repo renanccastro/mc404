@@ -1,0 +1,28 @@
+LOAD MQ,M(3FE) #carrega g no MQ
+MUL M(3FF) #multiplica MQ por x
+#agora ac = gx
+STOR M(0AA) #guarda y na memoria
+RSH # ac = gx/2 = k
+
+STOR M(0AB) #k na memoria
+
+COMECO DO ALGORITMO:
+LOAD M(0AA) # AC = y
+
+DIV M(0AB) #MQ= y/k
+
+####LOAD MQ # AC = MQ = y/k
+
+ADD M(0AB) #AC = y/k + k
+RSH #divide AC por dois
+
+STOR M(0AB) #guarda na memoria o valor de (y/k + k) /2
+#agora copia o contador para AC e subtrai
+LOAD M(0AC) #AC = contador
+SUB M(0AD) #SUBTRAI O CONTADOR DE 1
+STOR M(0AC) #guarda ele denovo
+
+JUMP+M(LOAD M(0AA),0:19) #se AC for maior ou igual a zero
+
+LOAD M(0AB) carrega k para a memoria
+e salta para 400
