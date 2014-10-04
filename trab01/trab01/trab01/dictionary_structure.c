@@ -1,0 +1,37 @@
+#include "dictionary_structure.h"
+
+
+/* hash: form hash value for string s */
+unsigned hash(char *s)
+{
+    unsigned hashval;
+    for (hashval = 0; *s != '\0'; s++)
+        hashval = *s + 31 * hashval;
+    return hashval % HASHSIZE;
+}
+
+DictionaryNode *dictionary_get(Dictionary* dictionary, char *s)
+{
+    struct nlist *np;
+    for (np = dictionary->hashtable[hash(s)]; np != NULL; np = np->next)
+        if (strcmp(s, np->name) == 0)
+            return np; /* found */
+    return NULL; /* not found */
+}
+
+DictionaryNode *dictionary_put(Dictionary* dictionary, char *name, int location)
+{
+    struct nlist *np;
+    unsigned hashval;
+    if ((np = dictionary_get(dictionary, name)) == NULL) { /* not found */
+        np = (struct nlist *) malloc(sizeof(*np));
+        if (np == NULL || (np->name = strdup(name)) == NULL)
+            return NULL;
+        hashval = hash(name);
+        np->next = dictionary->hashtable[hashval];
+        dictionary->hashtable[hashval] = np;
+    }
+    np->location = location;
+    return np;
+}
+
