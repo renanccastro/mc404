@@ -22,7 +22,7 @@ int main (int argc, char *argv[])
         sprintf(output_file_name, "%s.hex", file_name);
     }
     
-    Node* main_list = read_ASM_file(output_file_name);
+    Node* main_list = read_ASM_file(file_name);
     
     
 }
