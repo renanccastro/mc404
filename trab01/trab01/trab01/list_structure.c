@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include "list_structure.h"
+#include <string.h>
 
 Node * create_list(){     // Função do tipo apontador para lista, 
     Node * new_list;
@@ -11,17 +11,21 @@ Node * create_list(){     // Função do tipo apontador para lista,
 
 void insert_at_end(Node **root, ListType type, void * data){
     Node *novo;
+    char* string_buffer;
+    
     novo = (Node *) malloc(sizeof(Node));
     if(novo == NULL) exit(0);
 	
 	if(type == kListOfLists){
 		novo->data.list = data;
 	}else{
-		novo->data.word = data;
+        string_buffer = malloc(sizeof(char)*strlen((char*)data));
+        strcpy(string_buffer, data);
+		novo->data.word = string_buffer;
 	}
     novo->next = NULL;
  
-    if(*root == NULL){
+    if((*root) == NULL){
         *root = novo;
     }else{
         Node *aux;

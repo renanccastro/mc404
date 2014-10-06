@@ -20,5 +20,5 @@ typedef struct dictionary { /* elemento da tabela */
     DictionaryNode * hashtable[HASHSIZE];
 } Dictionary;
 
-DictionaryNode *dictionary_put(Dictionary* dictionary, char *name, int location);
+DictionaryNode *dictionary_put(Dictionary* dictionary, char *name, int location, InstructionPosition position);
 DictionaryNode *dictionary_get(Dictionary* dictionary, char *s);

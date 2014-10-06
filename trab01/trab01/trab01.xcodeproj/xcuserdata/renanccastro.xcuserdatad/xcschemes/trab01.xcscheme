@@ -57,6 +57,12 @@
             ReferencedContainer = "container:trab01.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "/Users/renanccastro/Documents/Faculdade/MC404/trab01/trab01/trab01/file.txt"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

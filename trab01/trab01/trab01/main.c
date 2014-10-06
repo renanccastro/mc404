@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "readASM.h"
+//#include "readASM.h"
+#include "assembler.h"
+//#include "dictionary_structure.h"
 
 int main (int argc, char *argv[])
 {
@@ -23,6 +25,6 @@ int main (int argc, char *argv[])
     }
     
     Node* main_list = read_ASM_file(file_name);
-    
+    Dictionary* labels_dic = labels_dictionary(main_list);
     
 }

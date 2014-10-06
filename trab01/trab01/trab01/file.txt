@@ -1,6 +1,4 @@
-linha 1
-
-linha 2
-linha 3
-
-linha 4
+teste: LD 0x000
+LD_N 0x000
+teste2: LD_ABS 0x001
+teste3: LD 0x0001

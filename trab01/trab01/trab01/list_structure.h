@@ -1,3 +1,4 @@
+#include <stdlib.h>
 typedef struct Node_st{
 	union{
 		struct Node_st* list;
