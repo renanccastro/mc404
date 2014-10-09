@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C20A328F19E71DBC00A1760E /* utils.c in Sources */ = {isa = PBXBuildFile; fileRef = C20A328D19E71DBC00A1760E /* utils.c */; };
 		C2D56ECD19E046A9001DD186 /* list_structure.c in Sources */ = {isa = PBXBuildFile; fileRef = C2D56EC819E046A9001DD186 /* list_structure.c */; };
 		C2D56ECE19E046A9001DD186 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = C2D56ECA19E046A9001DD186 /* Makefile */; };
 		C2D56ECF19E046A9001DD186 /* readASM.c in Sources */ = {isa = PBXBuildFile; fileRef = C2D56ECC19E046A9001DD186 /* readASM.c */; };
@@ -28,6 +29,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C20A328D19E71DBC00A1760E /* utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utils.c; sourceTree = "<group>"; };
+		C20A328E19E71DBC00A1760E /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
 		C2D56EBD19E04675001DD186 /* trab01 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = trab01; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2D56EC719E046A9001DD186 /* file.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = file.txt; sourceTree = "<group>"; };
 		C2D56EC819E046A9001DD186 /* list_structure.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = list_structure.c; sourceTree = "<group>"; };
@@ -83,6 +86,8 @@
 				C2D56ED419E05647001DD186 /* assembler.h */,
 				C2D56ED619E057DA001DD186 /* dictionary_structure.c */,
 				C2D56ED719E057DA001DD186 /* dictionary_structure.h */,
+				C20A328D19E71DBC00A1760E /* utils.c */,
+				C20A328E19E71DBC00A1760E /* utils.h */,
 			);
 			path = trab01;
 			sourceTree = "<group>";
@@ -144,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2D56ED519E05647001DD186 /* assembler.c in Sources */,
+				C20A328F19E71DBC00A1760E /* utils.c in Sources */,
 				C2D56ED119E049CB001DD186 /* main.c in Sources */,
 				C2D56ECE19E046A9001DD186 /* Makefile in Sources */,
 				C2D56ECF19E046A9001DD186 /* readASM.c in Sources */,
@@ -262,6 +268,7 @@
 				C2D56EC619E04675001DD186 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

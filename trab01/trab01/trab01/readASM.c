@@ -30,6 +30,10 @@ Node* read_ASM_file(char* file_name){
         strtok_aux = strtok(file_line, " \t"); //considera espaços e tabs
         while (strtok_aux != NULL)
         {
+            //se for um comentário, para de ler!
+            if (!strcmp(strtok_aux, "#")) {
+                break;
+            }
             convertToUpperCase(strtok_aux);
             insert_at_end(&word_list, kListOfData, strtok_aux);
             strtok_aux = strtok(NULL, " \t");
@@ -54,11 +58,14 @@ void chomp_string(char* string){
 }
 void convertToUpperCase(char *sPtr)
 {
-    while(*sPtr != '\0')
+    while(*sPtr != '\0'){
         *sPtr = toupper((unsigned char)*sPtr);
+        sPtr++;
+    }
 }
 
 //Retorna 0/1 se a string passada é um rótulo
+#warning REFAZER ESSA FUNÇÃO COM REGEXP
 int is_valid_label(char* string, size_t length){
     char* substring;
     if (length > 0) {
@@ -97,26 +104,26 @@ int instruction_value(char* string, size_t length){
     return 0;
 }
 
-STR2INT_ERROR str2int (long *i, char const *s)
+STR2INT_ERROR str2int (long *i, char const *s, int *base)
 {
     char *end;
-    int base = 10;
+    *base = 10;
     long  l;
     //primeiro, descobrimos a base
     size_t strlength = strlen(s);
     if (strlength > 2 && s[0] == '0') {
         switch (s[1]) {
-            case 'x':
-                base = 16;
+            case 'X':
+                *base = 16;
                 break;
-            case 'b':
-                base = 2;
+            case 'B':
+                *base = 2;
                 break;
-            case 'o':
-                base = 8;
+            case 'O':
+                *base = 8;
                 break;
             default:
-                base = 10;
+                show_build_error("Formato de número inválido.",-1);
                 break;
         }
         s = s+2;
@@ -125,7 +132,7 @@ STR2INT_ERROR str2int (long *i, char const *s)
     
     errno = 0;
     //depois convertemos com a base obtida!
-    l = strtol(s, &end, base);
+    l = strtol(s, &end, *base);
     if (errno == ERANGE) {
         return RANGE_ERROR;
     }
@@ -135,4 +142,9 @@ STR2INT_ERROR str2int (long *i, char const *s)
     *i = l;
     return SUCCESS;
 }
+int is_valid_directive(char* string){
+    return(!strcmp(string, ".ORG")       || !strcmp(string, ".ALIGN")    ||
+           !strcmp(string, ".WFILL")   || !strcmp(string, ".WORD")   ||
+           !strcmp(string, ".SET"));
 
+}

@@ -1,4 +1,6 @@
+.org 100
 teste: LD 0x000
 LD_N 0x000
+.align 1
 teste2: LD_ABS 0x001
 teste3: LD 0x0001

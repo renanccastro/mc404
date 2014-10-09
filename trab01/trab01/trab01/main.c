@@ -6,7 +6,7 @@
 
 int main (int argc, char *argv[])
 {
-    
+    Dictionary* set_constants;
     if (argc < 2) {
         printf("Forma de uso: %s source.in output.out", argv[0]);
         return (1);
@@ -25,6 +25,6 @@ int main (int argc, char *argv[])
     }
     
     Node* main_list = read_ASM_file(file_name);
-    Dictionary* labels_dic = labels_dictionary(main_list);
+    Dictionary* labels_dic = labels_dictionary(main_list, &set_constants);
     
 }
