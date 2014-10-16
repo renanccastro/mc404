@@ -31,7 +31,7 @@ Node* read_ASM_file(char* file_name){
         while (strtok_aux != NULL)
         {
             //se for um comentário, para de ler!
-            if (!strcmp(strtok_aux, "#")) {
+            if (strtok_aux[0] == '#') {
                 break;
             }
             convertToUpperCase(strtok_aux);
@@ -86,6 +86,11 @@ int is_valid_label(char* string, size_t length){
         return 0;
     }
 }
+int is_valid_sym(char* string, size_t length){
+#warning    //TODO:FAZER VERIFICAÇÃO DE VALIDADE!
+    return 1;
+}
+
 int is_valid_instruction(char* string){
     //se for uma dos mnemonicos do ias
     return(!strcmp(string, "LD")       || !strcmp(string, "LD_N")    ||

@@ -26,5 +26,6 @@ int main (int argc, char *argv[])
     
     Node* main_list = read_ASM_file(file_name);
     Dictionary* labels_dic = labels_dictionary(main_list, &set_constants);
+    assemble_file(main_list, labels_dic, set_constants, output_file_name);
     
 }

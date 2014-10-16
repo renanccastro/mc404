@@ -17,5 +17,6 @@ void chomp_string(char* string);
 int is_valid_label(char* string, size_t length);
 int is_valid_instruction(char* string);
 int is_valid_directive(char* string);
+int is_valid_sym(char* string, size_t length);
 void convertToUpperCase(char *sPtr);
 STR2INT_ERROR str2int (long *i, char const *s, int *base);

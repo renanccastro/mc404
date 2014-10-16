@@ -8,3 +8,4 @@
 
 
 Dictionary* labels_dictionary(Node* file, Dictionary** set_constants);
+void assemble_file(Node* file, Dictionary* label_dictionary, Dictionary* set_constants, char* output_filename);

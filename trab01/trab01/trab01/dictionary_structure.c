@@ -19,7 +19,7 @@ DictionaryNode *dictionary_get(Dictionary* dictionary, char *s)
     return NULL; /* not found */
 }
 
-DictionaryNode *dictionary_put(Dictionary* dictionary, char *name, int location, InstructionPosition position)
+DictionaryNode *dictionary_put(Dictionary* dictionary, char *name, long location, InstructionPosition position)
 {
     struct nlist *np;
     unsigned hashval;
