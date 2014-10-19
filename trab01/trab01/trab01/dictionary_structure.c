@@ -12,6 +12,9 @@ unsigned hash(char *s)
 
 DictionaryNode *dictionary_get(Dictionary* dictionary, char *s)
 {
+    if (!s) {
+        return NULL;
+    }
     struct nlist *np;
     for (np = dictionary->hashtable[hash(s)]; np != NULL; np = np->next)
         if (strcmp(s, np->name) == 0)

@@ -3,6 +3,7 @@
 Node* read_ASM_file(char* file_name){
     Node* root = NULL, *word_list, *aux = NULL;
     size_t nbytes_preffered = BUFFER_SIZE, bytes_read;//numero de bytes esperados/lidos
+    int line_number = 1;
     char * file_line, *strtok_aux;
     FILE *file;
     
@@ -19,10 +20,11 @@ Node* read_ASM_file(char* file_name){
         chomp_string(file_line);
         //se é uma linha vazia, não devemos adicionar a lista
         if (!strcmp(file_line,"")) {
+            line_number++;
             continue;
         }
         
-        insert_at_end(&root, kListOfLists, NULL); //data é null pq setamos mais pra frente
+        insert_at_end(&root, kListOfLists, NULL, line_number); //data é null pq setamos mais pra frente
         aux = aux != NULL ? aux->next : root; //avança o ponteiro da lista
 
         word_list = NULL;
@@ -35,13 +37,14 @@ Node* read_ASM_file(char* file_name){
                 break;
             }
             convertToUpperCase(strtok_aux);
-            insert_at_end(&word_list, kListOfData, strtok_aux);
+            insert_at_end(&word_list, kListOfData, strtok_aux, -1);
             strtok_aux = strtok(NULL, " \t");
         }
         
         //agora seta a lista do nó adicionado anteriormente
         aux->data.list = word_list;
-        printf("First element data: %s\n",root->data.list->data.word);
+//        printf("First element data: %s\n",root->data.list->data.word);
+        line_number++;
     }
     //fecha o arquivo
     fclose(file);
@@ -64,31 +67,20 @@ void convertToUpperCase(char *sPtr)
     }
 }
 
+int match_regexp(char* string, char* regexp){
+    regex_t regex;
+    int reti;
+    reti = regcomp(&regex, regexp, REG_EXTENDED);
+    reti = regexec(&regex, string, 0, NULL, 0);
+    
+    return !reti;
+}
 //Retorna 0/1 se a string passada é um rótulo
-#warning REFAZER ESSA FUNÇÃO COM REGEXP
 int is_valid_label(char* string, size_t length){
-    char* substring;
-    if (length > 0) {
-        substring = strstr(string, ":");
-        //se contiver ':'
-        if (substring == NULL) {
-            return 0;
-        }else{
-            //e se ele estiver no final
-            if (strlen(substring) == 1) {
-                //se o primeiro caracter for alfabetico
-                return isalpha(string[0]);
-            }else{
-                return 0;
-            }
-        }
-    }else{
-        return 0;
-    }
+    return match_regexp(string, "^[A-Z_]([A-Z_0-9])*:$");
 }
 int is_valid_sym(char* string, size_t length){
-#warning    //TODO:FAZER VERIFICAÇÃO DE VALIDADE!
-    return 1;
+    return match_regexp(string, "^[A-Z_]([A-Z_0-9])*$");
 }
 
 int is_valid_instruction(char* string){
@@ -102,11 +94,6 @@ int is_valid_instruction(char* string){
            !strcmp(string, "MUL")      || !strcmp(string, "DIV")     ||
            !strcmp(string, "LSH")      || !strcmp(string, "RSH")     ||
            !strcmp(string, "ST_ADDR") );
-}
-
-int instruction_value(char* string, size_t length){
-    //TODO:
-    return 0;
 }
 
 STR2INT_ERROR str2int (long *i, char const *s, int *base)
@@ -126,9 +113,6 @@ STR2INT_ERROR str2int (long *i, char const *s, int *base)
                 break;
             case 'O':
                 *base = 8;
-                break;
-            default:
-                show_build_error("Formato de número inválido.",-1);
                 break;
         }
         s = s+2;

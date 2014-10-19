@@ -9,7 +9,7 @@ Node * create_list(){     // Função do tipo apontador para lista,
     return new_list;
 }
 
-void insert_at_end(Node **root, ListType type, void * data){
+void insert_at_end(Node **root, ListType type, void * data, int line_number){
     Node *novo;
     char* string_buffer;
     
@@ -18,6 +18,7 @@ void insert_at_end(Node **root, ListType type, void * data){
 	
 	if(type == kListOfLists){
 		novo->data.list = data;
+        novo->line_number = line_number;
 	}else{
         string_buffer = malloc(sizeof(char)*strlen((char*)data));
         strcpy(string_buffer, data);

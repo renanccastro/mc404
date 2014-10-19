@@ -6,20 +6,53 @@ int validateDirective(Dictionary* sets_dictionary, Node* word, int* current_ias_
     //pega os argumentos da possível diretiva
     char* first_argument = word->next ? word->next->data.word : NULL;
     char* second_argument = first_argument ? (word->next->next ? word->next->next->data.word : NULL) : NULL;
-    
+    DictionaryNode* tmp;
     long value, value2;
     int base = 10;
+    int flag_first_argument_valid = 0;
     //pode ser uma diretiva, e está no lugar correto.
     if (is_valid_directive(string)) {
+        //Primeiro verificamos se é um set.
+        if(!strcmp(string, ".SET")){
+            if (is_valid_sym(first_argument, strlen(first_argument))){
+                if (second_argument && (str2int(&value2, second_argument,&base) == SUCCESS)) {
+                    if (sets_dictionary) {
+                        if (!dictionary_get(sets_dictionary, first_argument)) {
+                            tmp = dictionary_put(sets_dictionary, first_argument, value2, kSetDirective);
+                            tmp->base = base;
+                        }else{
+                            show_build_error("Múltiplas definições com .set", line);
+                        }
+                        
+                    }
+                    show_build_warning("Encontrei um .set!",line);
+                    return 3;
+                }
+            }else{
+                show_build_error("Caracteres inválidos no nome da constante", line);
+            }
+        }
+        
         //todas possuem pelo menos um argumento
+        tmp = dictionary_get(sets_dictionary, first_argument);
         if (first_argument) {
+            //pegamos o primeiro argumento ou parseando um int, ou pegando do banco de sets
             if (str2int(&value, first_argument,&base) == SUCCESS) {
+                flag_first_argument_valid = SUCCESS;
+            }else if(tmp != NULL){
+                flag_first_argument_valid = SUCCESS;
+                value = tmp->location;
+                base = tmp->base;
+            }
+
+            if (flag_first_argument_valid == SUCCESS) {
+                
                 if (!strcmp(string, ".ALIGN") ) {
                     if (base == 10 && value<=1023 && value>=0) {
                         //pega o proximo numero multiplo de 'value'
                         *current_ias_word = ((*current_ias_word / (int)value) + 1) * (int)value;
                         *current_position = kLeft;
-                        show_build_warning("Encontrei um .Align!");
+                        show_build_warning("Encontrei um .Align!",line);
                         return 2;
                     }else{
                         show_build_error("Parâmetro inválido para diretiva .ALIGN", line);
@@ -29,41 +62,34 @@ int validateDirective(Dictionary* sets_dictionary, Node* word, int* current_ias_
                     if ((base == 10 && value>=0 && value <= 1023) || base != 10){
                         *current_ias_word = (int)value;
                         *current_position = kLeft;
-                        show_build_warning("Encontrei um .org!");
+                        show_build_warning("Encontrei um .org!",line);
                         return 2;
                     }else{
                         show_build_error("Parâmetro inválido para diretiva .ORG", line);
                     }
                 }else if(!strcmp(string, ".WORD")){
                     if (*current_position == kLeft) {
-                        (*current_ias_word)++;
-                        show_build_warning("Encontrei um .word!");
+                        if ((base == 10 && value <= (pow(2,32)-1) && value >= 0) || base != 10 || is_valid_sym(first_argument, strlen(first_argument))) {
+                            (*current_ias_word)++;
+                            show_build_warning("Encontrei um .word!",line);
+                            return 2;
+                        }else{
+                            show_build_error("Número extrapola o valor máximo para .word!", line);
+                        }
                     }else{
                         show_build_error("Não é possível colocar um valor desalinhado na memória!", line);
                     }
-                    return 2;
                 }else if (!strcmp(string, ".WFILL")){
-                    if (second_argument && (str2int(&value2, second_argument,&base) == SUCCESS || is_valid_sym(second_argument, strlen(second_argument)))) {
+                    if (second_argument && (((str2int(&value2, second_argument,&base) == SUCCESS)) || (dictionary_get(sets_dictionary, second_argument)) || is_valid_sym(second_argument, strlen(second_argument)))) {
                         //se é possível colocar uma palavra inteira aqui
                         if (*current_position == kLeft) {
                             (*current_ias_word) += value;
-                            show_build_warning("Encontrei um .wfill!");
+                            show_build_warning("Encontrei um .wfill!",line);
                         }else{
                             show_build_error("Não é possível colocar um vetor desalinhado na memória!", line);
                         }
                         return 3;
                     }
-                }
-                //se não for um número o primeiro parâmetro
-            }else {
-                if(!strcmp(string, ".WORD") && is_valid_sym(first_argument, strlen(first_argument))){
-                    (*current_ias_word)++;
-                    show_build_warning("Encontrei um .word");
-                    return 2;
-                }else if(!strcmp(string, ".SET") && is_valid_sym(first_argument, strlen(first_argument)) && second_argument && (str2int(&value2, second_argument,&base) == SUCCESS)){
-                    dictionary_put(sets_dictionary, first_argument, value2, kSetDirective);
-                    show_build_warning("Encontrei um .set!");
-                    return 3;
                 }
             }
         }else{
@@ -82,7 +108,7 @@ int validateDirective(Dictionary* sets_dictionary, Node* word, int* current_ias_
 Dictionary* labels_dictionary(Node* file, Dictionary** set_constants){
     Dictionary* dictionary = malloc(sizeof(Dictionary));
     *set_constants = malloc(sizeof(Dictionary));
-    int current_ias_word = 0, i, line_contains_label = 0, number_of_expected_words = 0, line_number = 1;
+    int current_ias_word = 0, i, line_contains_label = 0, number_of_expected_words = 0;
     char* first_argument = NULL, *second_argument = NULL;
     InstructionPosition current_position = kLeft;
     size_t string_size;
@@ -108,20 +134,20 @@ Dictionary* labels_dictionary(Node* file, Dictionary** set_constants){
             //se for um rotulo, e estiver em primeiro na linha
             if(is_valid_label(string, string_size)){
                 if (i == 0) {
-                    //TODO: Retirar depois
+                    string[string_size-1] = '\0';
                     printf("Label '%s' encontrado, %d\n", string, i);
                     line_contains_label = 1;
                     dictionary_put(dictionary, string, current_ias_word, current_position);
-                    number_of_expected_words += 1;
+                    number_of_expected_words++;
                 }else{
-                    show_build_error("O rótulo deve estar no começo da linha.\n",line_number);
+                    show_build_error("O rótulo deve estar no começo da linha.\n",line->line_number);
                 }
             }
             
             //se pode ser uma diretiva
             if (*string == '.') {
                 if (i <= 1) {
-                    number_of_expected_words += validateDirective(*set_constants, word, &current_ias_word, &current_position, line_number);
+                    number_of_expected_words += validateDirective(*set_constants, word, &current_ias_word, &current_position, line->line_number);
                 }
             }
             if(is_valid_instruction(string)){
@@ -139,9 +165,8 @@ Dictionary* labels_dictionary(Node* file, Dictionary** set_constants){
         
         //Verifica se na linha só tem coisas válidas.
         if (i > number_of_expected_words) {
-            show_build_error("Caracteres sobrando", line_number);
+            show_build_error("Caracteres sobrando", line->line_number);
         }
-        line_number++;
     }
     
     return dictionary;
@@ -149,7 +174,95 @@ Dictionary* labels_dictionary(Node* file, Dictionary** set_constants){
 
 
 void assemble_file(Node* file, Dictionary* label_dictionary, Dictionary* set_constants, char* output_filename){
-    
+    FILE *output = fopen(output_filename, "w");
+    if (output == NULL)
+    {
+        show_build_error("Não foi possível abrir o arquivo de saída", -1);
+    }
+    int current_ias_word = 0, base = 10;
+    InstructionPosition current_position = kLeft;
+    size_t string_size;
+    char* string, *second_parameter_string;
+    DictionaryNode* tmp;
+    long int first_parameter, second_parameter;
+    for (Node* line = file; line != NULL; line = line->next){
+        
+        for (Node* word = line->data.list; word != NULL; word = word->next) {
+            
+            string = word->data.word;
+            string_size = strlen(string);
+            if (dictionary_get(label_dictionary, string)) {
+                continue;
+            }
+            
+            /**
+             *  Diretivas
+             */
+            if (!strcmp(string, ".WORD")) {
+                if (current_position != kLeft) {
+                    show_build_error("Não é possível colocar um valor desalinhado na memória!", line->line_number);
+                }
+                if(str2int(&first_parameter, word->next->data.word, &base) == SUCCESS){
+                    print_word(output, current_ias_word, first_parameter);
+                }else if((tmp = dictionary_get(set_constants, word->next->data.word)) != NULL){
+                    //verifica as constantes
+                    print_word(output, current_ias_word, tmp->location);
+                }else if((tmp = dictionary_get(label_dictionary, word->next->data.word)) != NULL){
+                    //verifica os labels
+                    print_word(output, current_ias_word, tmp->location);
+                }else{
+                    show_build_error("Símbolo não definido", line->line_number);
+                }
+                current_ias_word++;
+                break;
+            }else if(!strcmp(string, ".WFILL")){
+                
+                if(str2int(&first_parameter, word->next->data.word, &base) == SUCCESS){
+                }else if((tmp = dictionary_get(set_constants, word->next->data.word)) != NULL){
+                    first_parameter = tmp->location;
+                }else{
+                    show_build_error("Símbolo não definido", line->line_number);
+                }
+
+                str2int(&first_parameter, word->next->data.word, &base);
+                second_parameter_string = word->next->next->data.word;
+
+                if(str2int(&second_parameter, second_parameter_string, &base) == SUCCESS){
+                    print_vector(output, &current_ias_word, first_parameter, second_parameter);
+                }else if((tmp = dictionary_get(set_constants, second_parameter_string)) != NULL){
+                    //verifica as constantes
+                    print_vector(output, &current_ias_word, first_parameter, tmp->location);
+                }else if((tmp = dictionary_get(label_dictionary, second_parameter_string)) != NULL){
+                    //verifica os labels
+                    print_vector(output, &current_ias_word, first_parameter, tmp->location);
+                }else{
+                    show_build_error("Símbolo não definido", line->line_number);
+                }
+                break;
+            }else if(!strcmp(string, ".SET")){
+                //não faz nada, pois já foi setado as constantes
+                break;
+            }else if (string[0] == '.'){
+                if ((!strcmp(string, ".ALIGN") || !strcmp(string, ".ORG"))&& current_position == kRight) {
+                    fprintf(output, "00 000\n");
+                }
+                validateDirective(set_constants, word, &current_ias_word, &current_position, line->line_number);
+            }
+            
+            /**
+             *  Mnemônicos
+             */
+            if (is_valid_instruction(string)) {
+                print_instruction(output, word, label_dictionary, set_constants, current_ias_word, current_position,line->line_number);
+                current_ias_word += ((current_position + 1) / 2);
+                current_position =  ((current_position + 1) % 2);
+            }
+            
+        }
+    }
+    if (current_position == kRight) {
+        fprintf(output, "00 000\n");
+    }
 }
 
 

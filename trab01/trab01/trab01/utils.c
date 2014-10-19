@@ -9,6 +9,10 @@ void show_build_error(char* error, int line){
     exit(EXIT_FAILURE);
 
 }
-void show_build_warning(char* warning){
-    printf("WARNING: %s\n",warning);
+void show_build_warning(char* warning, int line){
+    if (line < 0) {
+        printf("WARNING: %s\n",warning);
+    }else{
+        printf("WARNING: %s, na linha %d\n",warning,line);
+    }
 }
