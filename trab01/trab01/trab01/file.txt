@@ -1,44 +1,103 @@
-# Programa que calcula a soma dos divisores inteiros e positivos de um número N,
-# armazenando este valor em AC no final. A palavra 1FF armazena a constante 1,
-# a 200 o valor atual do divisor, a 201 a soma dos divisores e a 3FF o número N.
-
+# Programa que, dada uma matriz M, constrói a sua transposta e, percorrendo esta, armazena em AC
+# a soma de seus elementos. M está representada em um vetor. Exemplo: para uma matriz 2x2, a
+# primeira posição do vetor é M[0][0], a segunda M[0][1], a terceira M[1][0] e a última M[1][1]
+.set A 123
 .org 0x000
-   LD numero      # Carregar em AC o valor de N
-   RSH            # Dividir o valor por 2, pois apenas os números 1 <= candidato <= N/2
-                  # serão analisados (se são divisores de N ou não)
-   ST M(0x202)    # Armazenar este valor na palavra 202
-   
-   laco:           # Início de um laco
-      LD divisor   # Verificar se o divisor <= N/2
-      ADD constante
-      ST divisor   # Armazenar o valor do novo candidato a divisor de N
-      SUB M(0x202)
-      SUB constante
-      JGE resultado     # Caso o candidato a divisor seja maior que N/2, pular
-                        # para o comando a direita da palavra 008
-      LD numero
-      DIV divisor          # Realizar a divisão
-      SUB constante        # Substrair 1 unidade do resto da divisão e verificar se ela
-      JGE laco             # ela é inteira. Em caso negativo, voltar para o início do laco
-      
-      LD_MQ              # Transferir o quociente de MQ para AC
-      ADD soma           # Adicionar o quociente ao valor soma e armazenar
-      ST soma            # o novo valor à respectiva palavra
-      JMP laco           # Voltar para o início do laco a fim de verificar um
-                         # novo candidato a divisor de N
-   resultado:
-   LD soma            # Carregar em AC o valor final da soma dos divisores de N
-   JMP M(0x400)  # Pular para o endereço inexistente 0x400, encerrando o programa
+LD_MQMX linhas    # Carregar em MQ o número de linhas da matriz M
+LD_MQ             # Transferir o valor de MQ para AC
+SUB constante     # Fazer número de linhas - 1, que será o número de
+# mudanças de linha a cada coluna no programa
+ST M(0x203)       # e armazenar este valor na palavra 203
+
+LD_MQMX colunas   # Carregar em MQ o número de colunas da matriz M
+LD_MQ             # Transferir o valor de MQ para AC
+SUB constante     # Fazer número de colunas - 1, que será o número de
+# mudanças de coluna no programa
+ST M(0x204)       # e armazenar este valor na palavra 204
+
+
+LD inicio
+ST M(0x205)    # Armazenar o endereço da primeira posição da matriz M na palavra 205
+
+LD transposta
+ST M(0x206)    # Armazenar o endereço da primeira posição da transposta na palavra 206
+
+laco:          # Início do laco, que percorrerá a matriz M e construirá a transposta
+LD M(0x205)
+ST_ADDR M(0x008)  # Fazer transferência de endereço envolvendo a matriz M
+LD M(0x206)
+ST_ADDR M(0x008) # Fazer transferência de endereço envolvendo a matriz transposta
+
+LD M(0x006)  # Armazenar na matriz transposta um valor contido na matriz M. Na primeira
+ST M(0x007)  # iteração, será armazenado o valor de M[0][0] na palavra 100 (transposta)
+
+LD M(0x206)
+ADD constante   # Avançar uma posição no "vetor" que armazena a matriz transposta
+ST M(0x206)
+
+LD M(0x205)
+ADD colunas    # Avançar para a linha seguinte da matriz M
+ST M(0x205)
+
+LD M(0x203)
+SUB constante  # Subtrair 1 unidade do conteúdo de 203, indicando que avançou-se para
+ST M(0x203)    # a linha seguinte
+JGE laco       # Se nem todas as linhas foram percorridas, voltar para o início do laco
+
+LD i
+ADD constante  # Incrementar o valor de i
+ST i
+
+LD inicio
+ADD i          # Atualizar a próxima posição da matriz M a ser visitada
+ST M(0x205)
+
+LD linhas
+SUB constante  # Como todas as linhas já foram visitadas e uma nova coluna será visitada,
+ST M(0x203)    # atualizar o conteúdo da palavra 203 para linhas - 1
+
+LD M(0x204)
+SUB constante  # Caso todas as colunas tenham sido percorridas, significa que a matriz transposta
+ST M(0x204)    # já foi montada. Caso contrário, fazer nova iteração, percorrendo nova coluna de M
+JGE laco
+
+LD soma        # Finalmente, fazer a soma dos valores da matriz transposta
+ADD M(0x100)
+ADD M(0x101)
+ADD M(0x102)
+ADD M(0x103)
+ADD M(0x104)
+ADD M(0x105)
+
+JMP M(0x400)
+
+
+.org 0x040
+.word 0000000001
+.word 0000000002
+.word 0000000003
+.word 0000000004
+.word 0000000005
+.word 0000000006
 
 .org 0x1FF
-constante: .word 0000000001  # Rótulo para a constante 1, armazenada na palavra 1FF
+transposta: .word 0000000100  # Rótulo que armazena o "endereço" da primeira posição
+# da matriz transposta
 
 .org 0x200
-divisor: .word 0000000000  # Rótulo para o valor atual do divisor, contido na palavra 200
+constante: .word 0000000001  # Rótulo que armazena a constante 1
 
 .org 0x201
-soma: .word 0000000001  # Rótulo para a soma dos divisores de N, contido na palavra 201
-                        # Já está incluso o valor da divisão N/N = 1
+i: .word 0000000001  # Rótulo que armazena o valor de i, usado para percorrer
+# as colunas da matriz M
+.org 0x202
+soma: .word 0000000000   # Rótulo que armazena a soma dos elementos da matriz transposta
+
+.org 0x3FD
+inicio: .word 0000000040  # Rótulo que armazena o "endereço" da primeira posição da matriz M
+
+.org 0x3FE
+linhas: .word 0000000003  # Rótulo que armazena o número de linhas da matriz M
 
 .org 0x3FF
-numero: .word 0x00000003E8  # Rótulo para o número N, armazenado na palavra 3FF
+colunas: .word 0000000002 # Rótulo que armazena o número de colunas da matriz M
