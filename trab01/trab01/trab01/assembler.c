@@ -196,7 +196,7 @@ Dictionary* labels_dictionary(Node* file, Dictionary** set_constants){
 
 
 void assemble_file(Node* file, Dictionary* label_dictionary, Dictionary* set_constants, char* output_filename){
-    FILE *output = fopen(output_filename, "w");
+    FILE *output = fopen(output_filename, "w+");
     if (output == NULL)
     {
         show_build_error("Não foi possível abrir o arquivo de saída", -1);
@@ -288,6 +288,14 @@ void assemble_file(Node* file, Dictionary* label_dictionary, Dictionary* set_con
     if (current_position == kRight) {
         fprintf(output, "00 000\n");
     }
+    
+    //Verifica se foi adicionado um '\n' no final do arquivo e remove.
+    fseek( output, -1, SEEK_END );
+    if (fgetc(output) == '\n') {
+        fseek( output, -1, SEEK_END );
+        ftruncate(fileno(output), ftell(output));
+    }
+    
 }
 
 
