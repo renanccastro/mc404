@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "readASM.h"
-#include <unistd.h>
 #include "utils.h"
 #import <math.h>
 #include "dictionary_structure.h"

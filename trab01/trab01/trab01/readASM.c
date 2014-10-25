@@ -43,7 +43,6 @@ Node* read_ASM_file(char* file_name){
         
         //agora seta a lista do nó adicionado anteriormente
         aux->data.list = word_list;
-//        printf("First element data: %s\n",root->data.list->data.word);
         line_number++;
     }
     //fecha o arquivo
@@ -77,7 +76,7 @@ int match_regexp(char* string, char* regexp){
 }
 //Retorna 0/1 se a string passada é um rótulo
 int is_valid_label(char* string, size_t length){
-    return match_regexp(string, "^[A-Z_]([A-Z_0-9])*:$");
+    return match_regexp(string, "^[A-Z_][A-Z0-9_]*:$");
 }
 int is_valid_sym(char* string, size_t length){
     return match_regexp(string, "^[A-Z_]([A-Z_0-9])*$");

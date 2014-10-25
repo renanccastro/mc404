@@ -84,15 +84,15 @@ int validateDirective(Dictionary* sets_dictionary, Node* word, int* current_ias_
                         if (second_argument) {
                             //pega do banco de sets ou parseando o número fornecido
                             tmp = dictionary_get(sets_dictionary, second_argument);
-                            if (str2int(&value, second_argument,&base) == SUCCESS) {
+                            if (str2int(&value2, second_argument,&base) == SUCCESS) {
                                 flag_first_argument_valid = SUCCESS;
                             }else if(tmp != NULL){
                                 flag_first_argument_valid = SUCCESS;
-                                value = tmp->location;
+                                value2 = tmp->location;
                                 base = tmp->base;
                             }
                             //se o segundo parametro é um número na base 10, confere o intervalo
-                            if (flag_first_argument_valid == SUCCESS && base == 10 && (value > (pow(2,31)-1) ||value < -1*(pow(2,31)))){
+                            if (flag_first_argument_valid == SUCCESS && base == 10 && (value2 > (pow(2,31)-1) ||value2 < -1*(pow(2,31)))){
                                 show_build_error("Parâmetro fora dos limites", line);
                             }
                             //se conseguiu parsear, ou é um possível label
@@ -289,12 +289,6 @@ void assemble_file(Node* file, Dictionary* label_dictionary, Dictionary* set_con
         fprintf(output, "00 000\n");
     }
     
-    //Verifica se foi adicionado um '\n' no final do arquivo e remove.
-    fseek( output, -1, SEEK_END );
-    if (fgetc(output) == '\n') {
-        fseek( output, -1, SEEK_END );
-        ftruncate(fileno(output), ftell(output));
-    }
     
 }
 

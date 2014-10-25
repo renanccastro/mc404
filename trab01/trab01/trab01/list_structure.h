@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #ifndef LIST_STRUCTURE_147775
 #define LIST_STRUCTURE_147775
+
+//Um nó da lista
 typedef struct Node_st{
 	union{
 		struct Node_st* list;
@@ -10,6 +12,7 @@ typedef struct Node_st{
     int line_number;
 }Node;
 
+//Tipo da lista
 typedef enum ListType{
 	kListOfLists,
 	kListOfData
