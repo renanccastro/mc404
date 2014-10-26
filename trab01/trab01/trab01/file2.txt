@@ -1,5 +1,0 @@
-first: LD M(0b01)
-second: LD M(0b01)
-.align 1
-.set TAMANHO_VETOR 10
-.wfill TAMANHO_VETOR second

@@ -130,13 +130,14 @@ int validateDirective(Dictionary* sets_dictionary, Node* word, int* current_ias_
 //Primeira etapa da montagem: Monta a tabela de rótulos e sets!
 Dictionary* labels_dictionary(Node* file, Dictionary** set_constants){
     Dictionary* dictionary = malloc(sizeof(Dictionary));
+    Node* line, * word;
     *set_constants = malloc(sizeof(Dictionary));
     int current_ias_word = 0, i, line_contains_label = 0, number_of_expected_words = 0;
     char* first_argument = NULL, *second_argument = NULL;
     InstructionPosition current_position = kLeft;
     size_t string_size;
     char * string;
-    for (Node* line = file; line != NULL; line = line->next){
+    for (line = file; line != NULL; line = line->next){
         
         if (current_ias_word > IAS_MAX_MEM_WORDS){
             show_build_error("O arquivo ultrapassou o limite de memória do IAS",-1);
@@ -146,7 +147,7 @@ Dictionary* labels_dictionary(Node* file, Dictionary** set_constants){
         line_contains_label = 0;
         number_of_expected_words = 0;
         //agora vemos cada palavra da linha
-        for (Node* word = line->data.list; word != NULL; word = word->next) {
+        for (word = line->data.list; word != NULL; word = word->next) {
             //pega o primeiro e o segundo argumento de uma possível instrução atual.
             first_argument = word->next ? word->next->data.word : NULL;
             second_argument = first_argument ? (word->next->next ? word->next->next->data.word : NULL) : NULL;
@@ -196,7 +197,9 @@ Dictionary* labels_dictionary(Node* file, Dictionary** set_constants){
 
 
 void assemble_file(Node* file, Dictionary* label_dictionary, Dictionary* set_constants, char* output_filename){
-    FILE *output = fopen(output_filename, "w+");
+    FILE *output = fopen(output_filename, "w");
+    printf("file: %s",output_filename);
+    Node* line, *word;
     if (output == NULL)
     {
         show_build_error("Não foi possível abrir o arquivo de saída", -1);
@@ -207,9 +210,9 @@ void assemble_file(Node* file, Dictionary* label_dictionary, Dictionary* set_con
     char* string, *second_parameter_string;
     DictionaryNode* tmp;
     long int first_parameter, second_parameter;
-    for (Node* line = file; line != NULL; line = line->next){
+    for (line = file; line != NULL; line = line->next){
         
-        for (Node* word = line->data.list; word != NULL; word = word->next) {
+        for (word = line->data.list; word != NULL; word = word->next) {
             
             string = word->data.word;
             string_size = strlen(string);

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include "readASM.h"
+#include "readASM.h"
 #include "assembler.h"
-//#include "dictionary_structure.h"
+#include "dictionary_structure.h"
 
 int main (int argc, char *argv[])
 {
@@ -18,10 +18,10 @@ int main (int argc, char *argv[])
     //se o usuário forneceu um segundo parâmetro usa
     //caso contrário adiciona .hex no final do primeiro
     if (argc > 2) {
-        output_file_name = malloc(sizeof(char) * (strlen(argv[2])));
-        strcpy(output_file_name, argv[2]);
+        output_file_name = strdup(argv[2]);
+        printf("aff: %s", output_file_name);
     }else{
-        output_file_name = malloc(sizeof(char) * (strlen(argv[1])  + 4));
+        output_file_name = malloc(sizeof(char) * (strlen(file_name)  + 4));
         sprintf(output_file_name, "%s.hex", file_name);
     }
     

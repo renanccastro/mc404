@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "readASM.h"
 #include "utils.h"
-#import <math.h>
+#include <math.h>
 #include "dictionary_structure.h"
 #include "writeASM.h"
 

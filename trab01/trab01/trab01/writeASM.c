@@ -101,7 +101,8 @@ void print_instruction(FILE* output, Node* line, Dictionary* labels, Dictionary*
     if (first) {
         fprintf(output, "%02X %03lX%c", instruction_code, first->location, position == kRight ? '\n' : ' ');
     }else{
-        if (first_argument_string && (first_argument_string_length = strlen(first_argument_string)) > 3 && first_argument_string[0] == 'M') {
+        //se possuir formato M()
+        if (first_argument_string && (first_argument_string_length = strlen(first_argument_string)) > 3 && match_regexp(first_argument_string, "^M\\(.*\\)$")) {
             //tira os parenteses e o M
             first_argument_string[first_argument_string_length-1] = '\0';
             first_argument_string += 2;
