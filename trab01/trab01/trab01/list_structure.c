@@ -20,8 +20,10 @@ void insert_at_end(Node **root, ListType type, void * data, int line_number){
 	if(type == kListOfLists){
 		novo->data.list = data;
         novo->line_number = line_number;
+        novo->type = type;
 	}else{
 		novo->data.word = strdup((char*)data);
+        novo->type = type;
 	}
     novo->next = NULL;
  
@@ -44,4 +46,19 @@ Node* last_element(Node* root){
         aux = aux->next;
     }
 	return aux;
+}
+void free_list(Node* root){
+    Node *aux1,*tmp1;
+    aux1 = root;
+    while(aux1->next != NULL){
+        tmp1 = aux1->next;
+        if (aux1->type == kListOfLists) {
+            free_list(aux1->data.list);
+        }else{
+            free(aux1->data.word);
+        }
+        free(aux1);
+        aux1 = tmp1;
+    }
+    free(aux1);
 }
