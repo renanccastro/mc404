@@ -28,5 +28,4 @@ typedef struct dictionary { /* elemento da tabela */
 
 DictionaryNode *dictionary_put(Dictionary* dictionary, char *name, long location, InstructionPosition position);
 DictionaryNode *dictionary_get(Dictionary* dictionary, char *s);
-void free_dictionary(Dictionary* dictionary);
 #endif

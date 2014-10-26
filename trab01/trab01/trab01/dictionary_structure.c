@@ -38,20 +38,3 @@ DictionaryNode *dictionary_put(Dictionary* dictionary, char *name, long location
     np->position = position;
     return np;
 }
-void free_dictionary(Dictionary* dictionary){
-    int i;
-    struct nlist* temp, *aux;
-    for (i = 0; i < HASHSIZE; i++) {
-        if (dictionary->hashtable[i] != NULL) {
-            temp = dictionary->hashtable[i];
-            while(temp->next != NULL){
-                aux = temp->next;
-                free(temp->name);
-                free(temp);
-                temp = aux;
-            }
-            free(temp);
-        }
-    }
-    free(dictionary);
-}

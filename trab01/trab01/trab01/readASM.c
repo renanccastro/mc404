@@ -38,14 +38,12 @@ Node* read_ASM_file(char* file_name){
             }
             convertToUpperCase(strtok_aux);
             insert_at_end(&word_list, kListOfData, strtok_aux, -1);
-            free(strtok_aux);
             strtok_aux = strtok(NULL, " \t");
         }
         
         //agora seta a lista do nó adicionado anteriormente
         aux->data.list = word_list;
         line_number++;
-        free(file_line);
         nbytes_preffered = 0;
         file_line = NULL;
     }

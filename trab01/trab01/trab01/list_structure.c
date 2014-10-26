@@ -47,21 +47,3 @@ Node* last_element(Node* root){
     }
 	return aux;
 }
-void free_list(Node* root){
-    if (root == NULL) {
-        return;
-    }
-    Node *aux1,*tmp1;
-    aux1 = root;
-    while(aux1->next != NULL){
-        tmp1 = aux1->next;
-        if (aux1->type == kListOfLists) {
-            free_list(aux1->data.list);
-        }else{
-            free(aux1->data.word);
-        }
-        free(aux1);
-        aux1 = tmp1;
-    }
-    free(aux1);
-}

@@ -25,6 +25,5 @@ typedef struct Node_st{
  Node * create_list();
  void insert_at_end(Node **root, ListType type, void * data, int line_number);
  Node* last_element(Node* root);
- void free_list(Node* root);
 
 #endif
