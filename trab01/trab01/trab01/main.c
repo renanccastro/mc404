@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "readASM.h"
 #include "assembler.h"
 #include "dictionary_structure.h"
@@ -8,7 +9,7 @@ int main (int argc, char *argv[])
 {
     Dictionary* set_constants;
     if (argc < 2) {
-        printf("Forma de uso: %s source.in output.out", argv[0]);
+        printf("Forma de uso: %s source.in output.out\n", argv[0]);
         return (1);
     }
 
@@ -19,7 +20,6 @@ int main (int argc, char *argv[])
     //caso contrário adiciona .hex no final do primeiro
     if (argc > 2) {
         output_file_name = strdup(argv[2]);
-        printf("aff: %s", output_file_name);
     }else{
         output_file_name = malloc(sizeof(char) * (strlen(file_name)  + 4));
         sprintf(output_file_name, "%s.hex", file_name);
@@ -29,4 +29,5 @@ int main (int argc, char *argv[])
     Dictionary* labels_dic = labels_dictionary(main_list, &set_constants);
     assemble_file(main_list, labels_dic, set_constants, output_file_name);
     
+    return 0;
 }

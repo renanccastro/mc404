@@ -2,9 +2,9 @@
 
 Node* read_ASM_file(char* file_name){
     Node* root = NULL, *word_list, *aux = NULL;
-    size_t nbytes_preffered = BUFFER_SIZE, bytes_read;//numero de bytes esperados/lidos
+    size_t nbytes_preffered = 0, bytes_read;//numero de bytes esperados/lidos
     int line_number = 1;
-    char * file_line, *strtok_aux;
+    char * file_line = NULL, *strtok_aux;
     FILE *file;
     
     file = fopen(file_name , "r");
@@ -44,6 +44,8 @@ Node* read_ASM_file(char* file_name){
         //agora seta a lista do nó adicionado anteriormente
         aux->data.list = word_list;
         line_number++;
+        nbytes_preffered = 0;
+        file_line = NULL;
     }
     //fecha o arquivo
     fclose(file);
