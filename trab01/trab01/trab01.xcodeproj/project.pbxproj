@@ -14,6 +14,7 @@
 		C2D56ED119E049CB001DD186 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = C2D56ED019E049CB001DD186 /* main.c */; };
 		C2D56ED519E05647001DD186 /* assembler.c in Sources */ = {isa = PBXBuildFile; fileRef = C2D56ED319E05647001DD186 /* assembler.c */; };
 		C2D56ED819E057DA001DD186 /* dictionary_structure.c in Sources */ = {isa = PBXBuildFile; fileRef = C2D56ED619E057DA001DD186 /* dictionary_structure.c */; };
+		C2DD21E019F2D23500AC8F97 /* writeASM.c in Sources */ = {isa = PBXBuildFile; fileRef = C2DD21DE19F2D23500AC8F97 /* writeASM.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,6 +44,9 @@
 		C2D56ED419E05647001DD186 /* assembler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assembler.h; sourceTree = "<group>"; };
 		C2D56ED619E057DA001DD186 /* dictionary_structure.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = dictionary_structure.c; sourceTree = "<group>"; };
 		C2D56ED719E057DA001DD186 /* dictionary_structure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dictionary_structure.h; sourceTree = "<group>"; };
+		C2DD21DE19F2D23500AC8F97 /* writeASM.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = writeASM.c; sourceTree = "<group>"; };
+		C2DD21DF19F2D23500AC8F97 /* writeASM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writeASM.h; sourceTree = "<group>"; };
+		C2DD21E119F324EA00AC8F97 /* file2.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = file2.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +79,7 @@
 		C2D56EBF19E04675001DD186 /* trab01 */ = {
 			isa = PBXGroup;
 			children = (
+				C2DD21E119F324EA00AC8F97 /* file2.txt */,
 				C2D56EC719E046A9001DD186 /* file.txt */,
 				C2D56EC819E046A9001DD186 /* list_structure.c */,
 				C2D56EC919E046A9001DD186 /* list_structure.h */,
@@ -88,6 +93,8 @@
 				C2D56ED719E057DA001DD186 /* dictionary_structure.h */,
 				C20A328D19E71DBC00A1760E /* utils.c */,
 				C20A328E19E71DBC00A1760E /* utils.h */,
+				C2DD21DE19F2D23500AC8F97 /* writeASM.c */,
+				C2DD21DF19F2D23500AC8F97 /* writeASM.h */,
 			);
 			path = trab01;
 			sourceTree = "<group>";
@@ -155,6 +162,7 @@
 				C2D56ECF19E046A9001DD186 /* readASM.c in Sources */,
 				C2D56ECD19E046A9001DD186 /* list_structure.c in Sources */,
 				C2D56ED819E057DA001DD186 /* dictionary_structure.c in Sources */,
+				C2DD21E019F2D23500AC8F97 /* writeASM.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

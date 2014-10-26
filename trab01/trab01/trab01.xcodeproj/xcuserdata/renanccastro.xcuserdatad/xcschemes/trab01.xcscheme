@@ -59,7 +59,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/Users/renanccastro/Documents/Faculdade/MC404/trab01/trab01/trab01/file.txt"
+            argument = "/Users/renanccastro/Desktop/testes_trabalho_01/arq04.in"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/renanccastro/Documents/Faculdade/MC404/trab01/trab01/trab01/file.txt.out"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
