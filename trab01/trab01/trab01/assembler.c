@@ -291,7 +291,7 @@ void assemble_file(Node* file, Dictionary* label_dictionary, Dictionary* set_con
         fprintf(output, "00 000\n");
     }
     
-    
+    fclose(output);
 }
 
 
