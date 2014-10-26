@@ -48,6 +48,9 @@ Node* last_element(Node* root){
 	return aux;
 }
 void free_list(Node* root){
+    if (root == NULL) {
+        return;
+    }
     Node *aux1,*tmp1;
     aux1 = root;
     while(aux1->next != NULL){

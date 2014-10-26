@@ -46,10 +46,12 @@ void free_dictionary(Dictionary* dictionary){
             temp = dictionary->hashtable[i];
             while(temp->next != NULL){
                 aux = temp->next;
+                free(temp->name);
                 free(temp);
                 temp = aux;
             }
             free(temp);
         }
     }
+    free(dictionary);
 }
